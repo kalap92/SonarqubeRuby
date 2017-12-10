@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,6 +19,9 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+
+import kalap.sonar.ruby.RubocopAnalyzedFile;
+import kalap.sonar.ruby.RubocopIssue;
 
 public class CreateIssuesOnRubyFiles implements Sensor {
 
@@ -58,24 +63,45 @@ public class CreateIssuesOnRubyFiles implements Sensor {
 		// descriptor.createIssuesForRuleRepositories(RubyRulesDefinition.REPOSITORY);
 	}
 
-	public void execute(SensorContext context) {
+	public HashMap<String, ArrayList<RubocopIssue>> getIssuesPerFileMap() {
+		HashMap<String, ArrayList<RubocopIssue>> issuesPerFileMap = new HashMap<String, ArrayList<RubocopIssue>>();
 		JSONArray rubocopJson = getRubocopJson();
-		LOGGER.info("we shall see");
-		LOGGER.info(rubocopJson.toString());
+		for (int i = 0; i < rubocopJson.size(); i++) {
+			JSONObject fileJson = (JSONObject) rubocopJson.get(i);
+			String path = (String) fileJson.get("path");
+			JSONArray offenses = (JSONArray) fileJson.get("offenses");
+			RubocopAnalyzedFile rubocopAnalyzedFile = new RubocopAnalyzedFile(path, offenses);
+			issuesPerFileMap.put(rubocopAnalyzedFile.getPath(), rubocopAnalyzedFile.getIssuesList());
+		}
+		return issuesPerFileMap;
+	}
 
+	public void execute(SensorContext context) {
 		FileSystem fs = context.fileSystem();
-		Iterable<InputFile> javaFiles = fs.inputFiles(fs.predicates().hasLanguage("ruby"));
-		for (InputFile javaFile : javaFiles) {
-			// no need to define the severity as it is automatically set according
-			// to the configured Quality profile
-			NewIssue newIssue = context.newIssue().forRule(RubyRulesDefinition.RULE_ON_LINE_1)
-					// gap is used to estimate the remediation cost to fix the debt
-					.gap(ARBITRARY_GAP);
+		Iterable<InputFile> rubyFiles = fs.inputFiles(fs.predicates().hasLanguage("ruby"));
+		HashMap<String, ArrayList<RubocopIssue>> issuesPerFileMap = getIssuesPerFileMap();
+		
+		for (InputFile rubyFile : rubyFiles) {
+			LOGGER.info(rubyFile.toString());
+			
+			ArrayList<RubocopIssue> issues = issuesPerFileMap.get(rubyFile.toString());
+			
+			for(RubocopIssue rubocopIssue : issues) {			
+				int lineNumber = rubocopIssue.getLine().intValue(); 
+				String message = rubocopIssue.getMessage(); 
 
-			NewIssueLocation primaryLocation = newIssue.newLocation().on(javaFile).at(javaFile.selectLine(LINE_1))
-					.message("You can't do anything. This is first line!");
-			newIssue.at(primaryLocation);
-			newIssue.save();
+				// no need to define the severity as it is automatically set according
+				// to the configured Quality profile
+				NewIssue newIssue = context.newIssue().forRule(RubyRulesDefinition.RULE_ON_LINE_1)
+						// gap is used to estimate the remediation cost to fix the debt
+						.gap(ARBITRARY_GAP);
+
+				NewIssueLocation primaryLocation = newIssue.newLocation().on(rubyFile).at(rubyFile.selectLine(lineNumber))
+						.message(message);
+				newIssue.at(primaryLocation);
+				newIssue.save();
+			}
+
 		}
 	}
 

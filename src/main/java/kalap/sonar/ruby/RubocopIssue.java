@@ -5,14 +5,20 @@ import org.json.simple.JSONObject;
 public class RubocopIssue {
 	private String severity;
 	private String message;
-	private int line;
-	private int column;
+	private Long line;
+	private Long column;
 	
 	public RubocopIssue(JSONObject issue) {
 		setSeverity(issue.get("severity").toString());
-		setMessage(issue.get("severity").toString());
-		setLine((Integer) issue.get("line"));
-		setColumn((Integer) issue.get("column"));
+		setMessage(issue.get("message").toString());
+
+		JSONObject location = (JSONObject) issue.get("location");
+		setLine((Long) location.get("line"));
+		setColumn((Long) location.get("column"));
+	}
+	
+	public String toString() {
+		return "message: " + message + " severity: " + severity + " line: " + line + " column: " + column;	
 	}
 
 	public String getSeverity() {
@@ -31,19 +37,19 @@ public class RubocopIssue {
 		this.message = message;
 	}
 
-	public int getLine() {
+	public Long getLine() {
 		return line;
 	}
 
-	private void setLine(int line) {
-		this.line = line;
+	private void setLine(Long long1) {
+		this.line = long1;
 	}
 
-	public int getColumn() {
+	public Long getColumn() {
 		return column;
 	}
 
-	private void setColumn(int column) {
-		this.column = column;
+	private void setColumn(Long long1) {
+		this.column = long1;
 	}
 }

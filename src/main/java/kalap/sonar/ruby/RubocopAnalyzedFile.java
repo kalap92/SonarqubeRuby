@@ -4,18 +4,26 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+
+import kalap.sonar.ruby.rules.CreateIssuesOnRubyFiles;
 
 public class RubocopAnalyzedFile {
-	private ArrayList<RubocopIssue> issuesList;
+	private ArrayList<RubocopIssue> issuesList = new ArrayList<RubocopIssue>();
 	private String path;
+	final Logger LOGGER = Loggers.get(CreateIssuesOnRubyFiles.class);
 
 	public RubocopAnalyzedFile(String path, JSONArray offenses) {
 		for (int i = 0; i < offenses.size(); i++) {
 			JSONObject issue = (JSONObject) offenses.get(i);
 			RubocopIssue rubocopIssue = new RubocopIssue(issue);
+			LOGGER.info("HERE");
+			LOGGER.info(rubocopIssue.toString());
 			issuesList.add(rubocopIssue);
-		}
+			LOGGER.info("DONE");
 
+		}
 		setPath(path);
 	}
 
@@ -27,7 +35,7 @@ public class RubocopAnalyzedFile {
 		this.path = path;
 	}
 
-	public ArrayList<RubocopIssue> getFilesPerIssues() {
+	public ArrayList<RubocopIssue> getIssuesList() {
 		return issuesList;
 	}
 }
