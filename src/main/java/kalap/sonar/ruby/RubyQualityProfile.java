@@ -6,11 +6,11 @@ import static kalap.sonar.ruby.rules.RubyRulesDefinition.REPOSITORY;
 public class RubyQualityProfile implements BuiltInQualityProfilesDefinition {
 
 	public void define(Context context) {
-		NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile("Ruby Rules", LanguageRuby.KEY);
+		NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile("Ruby Rules", RubyLanguage.KEY);
 		profile.setDefault(true);
 
 		NewBuiltInActiveRule rule1 = profile.activateRule(REPOSITORY, "line1");
-		rule1.overrideSeverity("BLOCKER");
+		rule1.overrideSeverity("MINOR");
 
 		profile.done();
 	}

@@ -18,11 +18,7 @@ public class RubocopAnalyzedFile {
 		for (int i = 0; i < offenses.size(); i++) {
 			JSONObject issue = (JSONObject) offenses.get(i);
 			RubocopIssue rubocopIssue = new RubocopIssue(issue);
-			LOGGER.info("HERE");
-			LOGGER.info(rubocopIssue.toString());
 			issuesList.add(rubocopIssue);
-			LOGGER.info("DONE");
-
 		}
 		setPath(path);
 	}

@@ -15,8 +15,7 @@ public final class RubyRulesDefinition implements RulesDefinition {
 				.setName("My Custom Ruby Analyzer");
 
 		NewRule x1Rule = repository.createRule(RULE_ON_LINE_1.rule()).setName("Stupid rule")
-				.setHtmlDescription("Generates an issue on every line 1 of Ruby files")
-				.setTags("style", "stupid")
+				.setHtmlDescription("To be done...Soon")
 				.setSeverity(Severity.MINOR);
 
 		x1Rule.setDebtRemediationFunction(x1Rule.debtRemediationFunctions().linearWithOffset("1h", "30min"));

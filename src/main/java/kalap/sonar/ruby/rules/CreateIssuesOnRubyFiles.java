@@ -26,7 +26,6 @@ import kalap.sonar.ruby.RubocopIssue;
 public class CreateIssuesOnRubyFiles implements Sensor {
 
 	private static final double ARBITRARY_GAP = 2.0;
-	private static final int LINE_1 = 1;
 	private final static String JSON_URL = "https://s3-us-west-2.amazonaws.com/kalap/data.json";
 	final Logger LOGGER = Loggers.get(CreateIssuesOnRubyFiles.class);
 
@@ -60,7 +59,6 @@ public class CreateIssuesOnRubyFiles implements Sensor {
 	public void describe(SensorDescriptor descriptor) {
 		descriptor.name("Generated rules from rubocop");
 		descriptor.onlyOnLanguage("ruby");
-		// descriptor.createIssuesForRuleRepositories(RubyRulesDefinition.REPOSITORY);
 	}
 
 	public HashMap<String, ArrayList<RubocopIssue>> getIssuesPerFileMap() {
@@ -76,7 +74,7 @@ public class CreateIssuesOnRubyFiles implements Sensor {
 		return issuesPerFileMap;
 	}
 
-	public void execute(SensorContext context) {
+	public void execute(SensorContext context) {		
 		FileSystem fs = context.fileSystem();
 		Iterable<InputFile> rubyFiles = fs.inputFiles(fs.predicates().hasLanguage("ruby"));
 		HashMap<String, ArrayList<RubocopIssue>> issuesPerFileMap = getIssuesPerFileMap();
@@ -90,10 +88,7 @@ public class CreateIssuesOnRubyFiles implements Sensor {
 				int lineNumber = rubocopIssue.getLine().intValue(); 
 				String message = rubocopIssue.getMessage(); 
 
-				// no need to define the severity as it is automatically set according
-				// to the configured Quality profile
 				NewIssue newIssue = context.newIssue().forRule(RubyRulesDefinition.RULE_ON_LINE_1)
-						// gap is used to estimate the remediation cost to fix the debt
 						.gap(ARBITRARY_GAP);
 
 				NewIssueLocation primaryLocation = newIssue.newLocation().on(rubyFile).at(rubyFile.selectLine(lineNumber))

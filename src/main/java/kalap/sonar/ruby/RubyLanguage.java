@@ -4,11 +4,11 @@ import org.sonar.api.internal.apachecommons.lang.ArrayUtils;
 import org.sonar.api.internal.apachecommons.lang.StringUtils;
 import org.sonar.api.resources.AbstractLanguage;
 
-public class LanguageRuby extends AbstractLanguage {
+public class RubyLanguage extends AbstractLanguage {
 
-  public static final LanguageRuby INSTANCE = new LanguageRuby("ruby");
+  public static final RubyLanguage INSTANCE = new RubyLanguage("ruby");
 
-    public LanguageRuby(String key) {
+    public RubyLanguage(String key) {
     super(key);
   }
 
@@ -36,7 +36,7 @@ public class LanguageRuby extends AbstractLanguage {
     /**
      * Default constructor
      */
-    public LanguageRuby() {
+    public RubyLanguage() {
       super(KEY, NAME);
     }
 
@@ -52,6 +52,6 @@ public class LanguageRuby extends AbstractLanguage {
     public static boolean isRubyFile(java.io.File file) {
       String suffix = "." + StringUtils.lowerCase(StringUtils.substringAfterLast(file.getName(), "."));
       return ArrayUtils.contains(SUFFIXES, suffix);
-    }
-    
+	}
+
 }
