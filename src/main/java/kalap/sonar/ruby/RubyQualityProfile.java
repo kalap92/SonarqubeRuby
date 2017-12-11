@@ -10,7 +10,7 @@ public class RubyQualityProfile implements BuiltInQualityProfilesDefinition {
 		profile.setDefault(true);
 
 		NewBuiltInActiveRule rule1 = profile.activateRule(REPOSITORY, "line1");
-		rule1.overrideSeverity("MINOR");
+		rule1.overrideSeverity("MAJOR");
 
 		profile.done();
 	}

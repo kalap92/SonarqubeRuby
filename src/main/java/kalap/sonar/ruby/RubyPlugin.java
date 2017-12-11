@@ -15,7 +15,7 @@ public class RubyPlugin implements Plugin {
 		        .category("Ruby")
 		        .subCategory("General")
 		        .onQualifiers(Qualifiers.PROJECT)
-		        .defaultValue("NONE")
+		        .defaultValue(null)
 		        .build());
 		context.addExtensions(CreateIssuesOnRubyFiles.class, RubyRulesDefinition.class);
 		context.addExtensions(RubyLanguage.class, RubyQualityProfile.class);
