@@ -27,7 +27,7 @@ public class RubyLanguage extends AbstractLanguage {
 		return SUFFIXES;
 	}
 
-	public static boolean isRubyFile(java.io.File file) {
+	public boolean isRubyFile(java.io.File file) {
 		String suffix = "." + StringUtils.lowerCase(StringUtils.substringAfterLast(file.getName(), "."));
 		return ArrayUtils.contains(SUFFIXES, suffix);
 	}
