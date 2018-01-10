@@ -27,8 +27,8 @@ public class RubyLanguageTest {
 	@Test
 	public void testConfig() {
 		assertThat(language.getKey()).isEqualTo("ruby");
-		assertThat(language.getName()).isEqualTo("Ruby");
-		assertThat(language.getFileSuffixes()).hasSize(2).contains("ruby").contains("rb");
+		assertThat(language.getName()).isEqualTo("ruby");
+		assertThat(language.getFileSuffixes()).hasSize(2).contains(".ruby").contains(".rb");
 	}
 
 	@Test
@@ -36,6 +36,5 @@ public class RubyLanguageTest {
 		assertEquals(language.isRubyFile(rubyFileOne), true);
 		assertEquals(language.isRubyFile(rubyFileTwo), true);
 		assertEquals(language.isRubyFile(notRubyFile), false);
-
 	}
 }

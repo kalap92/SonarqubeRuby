@@ -7,12 +7,12 @@ import org.json.simple.JSONObject;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-import kalap.sonar.ruby.rules.CreateIssuesOnRubyFiles;
+import kalap.sonar.ruby.rules.RubyFilesIssueCreator;
 
 public class RubocopAnalyzedFile {
 	private ArrayList<RubocopIssue> issuesList = new ArrayList<RubocopIssue>();
 	private String path;
-	final Logger LOGGER = Loggers.get(CreateIssuesOnRubyFiles.class);
+	final Logger LOGGER = Loggers.get(RubyFilesIssueCreator.class);
 
 	public RubocopAnalyzedFile(String path, JSONArray offenses) {
 		for (int i = 0; i < offenses.size(); i++) {

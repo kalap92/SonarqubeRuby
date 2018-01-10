@@ -6,7 +6,7 @@ import org.sonar.api.resources.AbstractLanguage;
 
 public class RubyLanguage extends AbstractLanguage {
 	public static final String KEY = "ruby";
-	public static final String NAME = "Ruby";
+	public static final String NAME = "ruby";
 	public static final String DEFAULT_PACKAGE_NAME = "[default]";
 	public static final String[] SUFFIXES = { ".rb", ".ruby" };
 

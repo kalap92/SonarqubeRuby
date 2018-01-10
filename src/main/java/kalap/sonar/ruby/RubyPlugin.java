@@ -4,7 +4,7 @@ import org.sonar.api.Plugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 
-import kalap.sonar.ruby.rules.CreateIssuesOnRubyFiles;
+import kalap.sonar.ruby.rules.RubyFilesIssueCreator;
 import kalap.sonar.ruby.rules.RubyRulesDefinition;
 
 public class RubyPlugin implements Plugin {
@@ -17,7 +17,7 @@ public class RubyPlugin implements Plugin {
 		        .onQualifiers(Qualifiers.PROJECT)
 		        .defaultValue(null)
 		        .build());
-		context.addExtensions(CreateIssuesOnRubyFiles.class, RubyRulesDefinition.class);
+		context.addExtensions(RubyFilesIssueCreator.class, RubyRulesDefinition.class);
 		context.addExtensions(RubyLanguage.class, RubyQualityProfile.class);
 	}
 }

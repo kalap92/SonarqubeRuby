@@ -25,18 +25,18 @@ import org.sonar.api.utils.log.Loggers;
 import kalap.sonar.ruby.RubocopAnalyzedFile;
 import kalap.sonar.ruby.RubocopIssue;
 
-public class CreateIssuesOnRubyFiles implements Sensor {
+public class RubyFilesIssueCreator implements Sensor {
 
 	protected final Configuration config;
 	private static final double ARBITRARY_GAP = 2.0;
-	final static Logger LOGGER = Loggers.get(CreateIssuesOnRubyFiles.class);
+	final static Logger LOGGER = Loggers.get(RubyFilesIssueCreator.class);
 	protected static final String URL_JSON_DATA = "sonar.ruby.rubocop.url";
 
-	protected String jsonDataKey() {
+	public String jsonDataKey() {
 		return URL_JSON_DATA;
 	}
 
-	protected String getJsonDataUrl() {
+	public String getJsonDataUrl() {
 		Optional<String> o = config.get(jsonDataKey());
 		if (o.isPresent()) {
 			return o.get();
@@ -44,7 +44,7 @@ public class CreateIssuesOnRubyFiles implements Sensor {
 		return null;
 	}
 
-	public CreateIssuesOnRubyFiles(final Configuration config) {
+	public RubyFilesIssueCreator(final Configuration config) {
 		this.config = config;
 	}
 
@@ -104,21 +104,8 @@ public class CreateIssuesOnRubyFiles implements Sensor {
 		return null;
 	}
 
-	public void execute(SensorContext context) {
-		String jsonDataUrl = getJsonDataUrl();
-		if (jsonDataUrl == null) {
-			LOGGER.error(jsonDataKey() + " must be set. Cancelling Ruby analysis");
-			return;
-		}
-
-		FileSystem fs = context.fileSystem();
-		Iterable<InputFile> rubyFiles = fs.inputFiles(fs.predicates().hasLanguage("ruby"));
-		HashMap<String, ArrayList<RubocopIssue>> issuesPerFileMap = getIssuesPerFileMap(jsonDataUrl);
-		
-		if (issuesPerFileMap == null) {
-			return;
-		}
-
+	public void createRubyIssues(Iterable<InputFile> rubyFiles,
+			HashMap<String, ArrayList<RubocopIssue>> issuesPerFileMap, SensorContext context) {
 		for (InputFile rubyFile : rubyFiles) {
 			LOGGER.info(rubyFile.toString());
 
@@ -141,4 +128,20 @@ public class CreateIssuesOnRubyFiles implements Sensor {
 		}
 	}
 
+	public void execute(SensorContext context) {
+		String jsonDataUrl = getJsonDataUrl();
+		if (jsonDataUrl == null) {
+			LOGGER.error(jsonDataKey() + " must be set. Cancelling Ruby analysis");
+			return;
+		}
+
+		FileSystem fs = context.fileSystem();
+		Iterable<InputFile> rubyFiles = fs.inputFiles(fs.predicates().hasLanguage("ruby"));
+		HashMap<String, ArrayList<RubocopIssue>> issuesPerFileMap = getIssuesPerFileMap(jsonDataUrl);
+		if (issuesPerFileMap == null) {
+			return;
+		}
+
+		createRubyIssues(rubyFiles, issuesPerFileMap, context);
+	}
 }
