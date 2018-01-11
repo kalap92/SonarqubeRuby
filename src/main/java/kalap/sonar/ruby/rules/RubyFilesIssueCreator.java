@@ -48,7 +48,7 @@ public class RubyFilesIssueCreator implements Sensor {
 		this.config = config;
 	}
 
-	public static String getHTML(String urlToRead) {
+	public static String getRubocopJsonData(String urlToRead) {
 		try {
 			StringBuilder result = new StringBuilder();
 			URL url = new URL(urlToRead);
@@ -70,7 +70,7 @@ public class RubyFilesIssueCreator implements Sensor {
 
 	public static JSONArray getRubocopJson(String jsonDataUrl) {
 		try {
-			String jsonOutput = getHTML(jsonDataUrl);
+			String jsonOutput = getRubocopJsonData(jsonDataUrl);
 			if (jsonOutput == null) {
 				return null;
 			}
@@ -116,7 +116,7 @@ public class RubyFilesIssueCreator implements Sensor {
 					int lineNumber = rubocopIssue.getLine().intValue();
 					String message = rubocopIssue.getMessage();
 
-					NewIssue newIssue = context.newIssue().forRule(RubyRulesDefinition.RULE_ON_LINE_1)
+					NewIssue newIssue = context.newIssue().forRule(RubyRulesDefinition.GLOBAL_RULE)
 							.gap(ARBITRARY_GAP);
 
 					NewIssueLocation primaryLocation = newIssue.newLocation().on(rubyFile)

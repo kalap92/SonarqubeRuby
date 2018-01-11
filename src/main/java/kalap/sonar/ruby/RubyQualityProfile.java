@@ -9,8 +9,8 @@ public class RubyQualityProfile implements BuiltInQualityProfilesDefinition {
 		NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile("Ruby Rules", RubyLanguage.KEY);
 		profile.setDefault(true);
 
-		NewBuiltInActiveRule rule1 = profile.activateRule(REPOSITORY, "line1");
-		rule1.overrideSeverity("MAJOR");
+		NewBuiltInActiveRule rule1 = profile.activateRule(REPOSITORY, "globalRule");
+		rule1.overrideSeverity("BLOCKER");
 
 		profile.done();
 	}
