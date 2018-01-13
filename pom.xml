@@ -11,7 +11,7 @@
 	<!-- this is important for sonar-packaging-maven-plugin -->
 	<packaging>sonar-plugin</packaging>
 	<name>RubyPlugin</name>
-
+  <description>Plugin retrieves Rubocop issue from a json file and assign it to files in SonarQube</description>
 
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
